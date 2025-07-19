@@ -18,6 +18,7 @@ const Login = () => {
 				password,
 			});
 
+			const { data } = res.data;
 			dispatch(addUser(res.data));
 			navigate("/");
 		} catch (error) {
