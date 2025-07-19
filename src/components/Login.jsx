@@ -13,13 +13,10 @@ const Login = () => {
 
 	const handleLogin = async () => {
 		try {
-			const res = await axiosClient.post("/login", {
-				email,
-				password,
-			});
+			const res = await axiosClient.post("/login", { email, password });
 
 			const { data } = res.data;
-			dispatch(addUser(res.data));
+			dispatch(addUser(data));
 			navigate("/");
 		} catch (error) {
 			console.log(error);

@@ -1,32 +1,38 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Outlet, useNavigate } from "react-router";
-import { addUser } from "../utils/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useNavigate, useLocation } from "react-router";
+import { addUser, removeUser } from "../utils/userSlice";
 import axiosClient from "../utils/axiosClient";
 import NavBar from "./NavBar";
 
 const Body = () => {
+	const user = useSelector((store) => store.user);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const fetchUser = async () => {
 		try {
 			const res = await axiosClient.get("/profile/view");
-			
-			const { data } = res.data;
-			
-			dispatch(addUser(data));
+			dispatch(addUser(res.data));
+
+			if (location.pathname === "/login") {
+				navigate("/");
+			}
 		} catch (err) {
-			if (err.status === 401) {
+			dispatch(removeUser());
+
+			if (location.pathname !== "/login") {
 				navigate("/login");
 			}
-			console.log(err);
 		}
 	};
 
 	useEffect(() => {
-		fetchUser();
-	}, []);
+		if (!user) {
+			fetchUser();
+		}
+	}, [user]);
 
 	return (
 		<>
