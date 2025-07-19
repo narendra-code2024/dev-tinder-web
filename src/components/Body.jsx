@@ -14,7 +14,8 @@ const Body = () => {
 	const fetchUser = async () => {
 		try {
 			const res = await axiosClient.get("/profile/view");
-			dispatch(addUser(res.data));
+			const { data } = res.data;
+			dispatch(addUser(data));
 
 			if (location.pathname === "/login") {
 				navigate("/");

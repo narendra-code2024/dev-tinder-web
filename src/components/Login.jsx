@@ -16,6 +16,7 @@ const Login = () => {
 			const res = await axiosClient.post("/login", { email, password });
 
 			const { data } = res.data;
+			console.log(data);
 			dispatch(addUser(data));
 			navigate("/");
 		} catch (error) {
