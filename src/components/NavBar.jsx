@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import { removeUser } from "../utils/userSlice";
 import axiosClient from "../utils/axiosClient";
+import { removeFeed } from "../utils/feedSlice";
+import { removeConnections } from "../utils/connectionSlice";
 
 const NavBar = () => {
 	const user = useSelector((store) => store.user);
@@ -12,6 +14,8 @@ const NavBar = () => {
 		try {
 			await axiosClient.post("/logout");
 			dispatch(removeUser());
+			dispatch(removeFeed());
+			dispatch(removeConnections());
 			navigate("/login");
 		} catch (error) {
 			console.log(error);
@@ -39,10 +43,7 @@ const NavBar = () => {
 						className="btn btn-ghost btn-circle avatar"
 					>
 						<div className="w-10 rounded-full">
-							<img
-								alt="User avatar"
-								src={user.photoUrl}
-							/>
+							<img alt="User avatar" src={user.photoUrl} />
 						</div>
 					</div>
 					<ul
@@ -51,6 +52,9 @@ const NavBar = () => {
 					>
 						<li>
 							<Link to="/profile">Profile</Link>
+						</li>
+						<li>
+							<Link to="/connections">Connections</Link>
 						</li>
 						<li>
 							<Link>Settings</Link>
