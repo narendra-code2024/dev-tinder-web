@@ -1,38 +1,38 @@
 import { useDispatch, useSelector } from "react-redux";
 import axiosClient from "../utils/axiosClient";
+import { addRequests } from "../utils/requestSlice";
 import { useEffect } from "react";
-import { addConnections } from "../utils/connectionSlice";
 
-const Connections = () => {
-	const connections = useSelector((state) => state.connections);
+const Requests = () => {
+	const requests = useSelector((store) => store.requests);
 	const dispatch = useDispatch();
-
-	const fetchConnections = async () => {
+	const fetchRequests = async () => {
 		try {
-			const res = await axiosClient.get("/user/connections");
-
-			dispatch(addConnections(res.data?.data));
+			const res = await axiosClient.get("/user/requests/received");
+			dispatch(addRequests(res.data.data));
 		} catch (err) {
 			console.log(err);
 		}
 	};
 
 	useEffect(() => {
-		fetchConnections();
+		fetchRequests();
 	}, []);
 
-	if (!connections) return;
+	if (!requests) return;
 
-	if (connections.length === 0)
+	if (requests.length === 0)
 		return (
-			<h1 className="flex justify-center my-10"> No Connections Found</h1>
+			<h1 className="flex justify-center my-10"> No Requests Found</h1>
 		);
 
 	return (
 		<div className="text-center my-10">
-			<h1 className="text-bold text-white text-3xl">Connections</h1>
+			<h1 className="text-bold text-white text-3xl">
+				Connections Requests
+			</h1>
 
-			{connections.map((connection) => {
+			{requests.map((connection) => {
 				const {
 					_id,
 					firstName,
@@ -41,7 +41,7 @@ const Connections = () => {
 					age,
 					gender,
 					about,
-				} = connection;
+				} = connection.fromUserId;
 
 				return (
 					<div
@@ -77,4 +77,4 @@ const Connections = () => {
 	);
 };
 
-export default Connections;
+export default Requests;
